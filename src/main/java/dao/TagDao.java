@@ -9,10 +9,13 @@ import org.jooq.impl.DSL;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.ArrayList;
 
 import static com.google.common.base.Preconditions.checkState;
 import static generated.Tables.RECEIPTS;
 import static generated.Tables.TAGS;
+import static generated.Tables.TAGSRECEIPTS;
+
 
 public class TagDao {
     DSLContext dsl;// database script language
@@ -22,22 +25,42 @@ public class TagDao {
     }
 
     public void insert(String tag, int receiptid) {
-        int tagsid = dsl
-                .insertInto(TAGS, TAGS.TAGNAME)
-                .values(tag)
-                .returning(TAGS.ID)
-                .fetchOne();
-        dsl.insertInto(TAGSRECEIPTS, TAGSRECEIPTS.TAGID, TAGSRECEIPTS.RECEIPTID)
-                .values(tagsid, receiptid);
+        TagsRecord tagsRecord;
+        if (dsl.fetchExists(TAGS,TAGS.TAGNAME.eq(tag))){
+            int tagid = dsl.selectFrom(TAGS)
+                    .where(TAGS.TAGNAME.eq(tag))
+                    .fetchOne()
+                    .getId();
+            dsl.insertInto(TAGSRECEIPTS, TAGSRECEIPTS.TAGID, TAGSRECEIPTS.RECEIPTID)
+                    .values(tagid, receiptid).returning(TAGS.ID)
+                    .fetchOne();
+        }
+        else {
+             tagsRecord = dsl
+                    .insertInto(TAGS, TAGS.TAGNAME)
+                    .values(tag)
+                    .returning(TAGS.ID)
+                    .fetchOne();
 
-        checkState(tagsRecord != null && tagsRecord.getId() != null, "Insert Tags failed");
+            dsl.insertInto(TAGSRECEIPTS, TAGSRECEIPTS.TAGID, TAGSRECEIPTS.RECEIPTID)
+                    .values(tagsRecord.getId(), receiptid).returning(TAGS.ID)
+                    .fetchOne();
+        }
+       // checkState(tagsRecord != null && tagsRecord.getId() != null, "Insert Tags failed");
         //******not sure whether it should  check these
         //******leaving the recipt id check in TagController
 
         //return tagsRecord.getId();// what you get after successfully post a receipt
     }
 
-    public Integer getTagIdByName(String tagName ) {
+    public void delete(int tid, int receiptId){
+        dsl.delete(TAGSRECEIPTS)
+                .where(TAGSRECEIPTS.TAGID.eq(tid))
+                .and(TAGSRECEIPTS.RECEIPTID.eq(receiptId))
+                .execute();
+    }
+
+    public int getTagIdByName(String tagName ) {
         // find the id of a tag
         int tagid = dsl.selectFrom(TAGS)
                 .where(TAGS.TAGNAME.eq(tagName))
@@ -46,14 +69,19 @@ public class TagDao {
         return tagid;
     }
     // undone
-    public List<ReceiptsRecord> getReceiptsByTagId(int tagid) {
-        // find the receipts associated with tags
-        /*return dsl.selectFrom(RECEIPTS)
-                .Join(TAGSRECEIPTS)
-                .on(RECEIPTS.ID.eq(TAGSRECEIPTS.RECEIPTID))
-                .where(TAGSRECEIPTS.TAGID.eq(tagid))
-                .fetch();*/
-        return dsl.selectFrom(RECEIPTS).fetch();
+    public List<Integer> getReceiptIdbyTagId(int tagid){
+        List<Integer> test = new ArrayList<Integer>();
+        test.add(1);
+        test.add(2);
+        test.add(3);
+        //return test;
+        //return test;
+        return dsl.selectFrom(TAGSRECEIPTS).where(TAGSRECEIPTS.TAGID.eq(tagid)).fetch(TAGSRECEIPTS.RECEIPTID);
+
     }
-    // undone
+
+    public Boolean contains(String tagName){
+        return dsl.fetchExists(TAGS, TAGS.TAGNAME.eq(tagName));
+    }
+
 }

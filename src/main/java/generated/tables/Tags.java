@@ -14,6 +14,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
@@ -33,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tags extends TableImpl<TagsRecord> {
 
-	private static final long serialVersionUID = -990662629;
+	private static final long serialVersionUID = -38383873;
 
 	/**
 	 * The reference instance of <code>public.tags</code>
@@ -51,12 +52,12 @@ public class Tags extends TableImpl<TagsRecord> {
 	/**
 	 * The column <code>public.tags.id</code>.
 	 */
-	public final TableField<TagsRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final TableField<TagsRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>public.tags.tag</code>.
+	 * The column <code>public.tags.tagname</code>.
 	 */
-	public final TableField<TagsRecord, String> TAG = createField("tag", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
+	public final TableField<TagsRecord, String> TAGNAME = createField("tagname", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
 	 * Create a <code>public.tags</code> table reference
@@ -78,6 +79,14 @@ public class Tags extends TableImpl<TagsRecord> {
 
 	private Tags(String alias, Table<TagsRecord> aliased, Field<?>[] parameters) {
 		super(alias, Public.PUBLIC, aliased, parameters, "");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Identity<TagsRecord, Integer> getIdentity() {
+		return Keys.IDENTITY_TAGS;
 	}
 
 	/**

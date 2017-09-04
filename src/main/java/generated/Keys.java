@@ -6,8 +6,10 @@ package generated;
 
 import generated.tables.Receipts;
 import generated.tables.Tags;
+import generated.tables.Tagsreceipts;
 import generated.tables.records.ReceiptsRecord;
 import generated.tables.records.TagsRecord;
+import generated.tables.records.TagsreceiptsRecord;
 
 import javax.annotation.Generated;
 
@@ -35,6 +37,7 @@ public class Keys {
 	// -------------------------------------------------------------------------
 
 	public static final Identity<ReceiptsRecord, Integer> IDENTITY_RECEIPTS = Identities0.IDENTITY_RECEIPTS;
+	public static final Identity<TagsRecord, Integer> IDENTITY_TAGS = Identities0.IDENTITY_TAGS;
 
 	// -------------------------------------------------------------------------
 	// UNIQUE and PRIMARY KEY definitions
@@ -42,6 +45,7 @@ public class Keys {
 
 	public static final UniqueKey<ReceiptsRecord> CONSTRAINT_F = UniqueKeys0.CONSTRAINT_F;
 	public static final UniqueKey<TagsRecord> CONSTRAINT_2 = UniqueKeys0.CONSTRAINT_2;
+	public static final UniqueKey<TagsreceiptsRecord> CONSTRAINT_25 = UniqueKeys0.CONSTRAINT_25;
 
 	// -------------------------------------------------------------------------
 	// FOREIGN KEY definitions
@@ -54,10 +58,12 @@ public class Keys {
 
 	private static class Identities0 extends AbstractKeys {
 		public static Identity<ReceiptsRecord, Integer> IDENTITY_RECEIPTS = createIdentity(Receipts.RECEIPTS, Receipts.RECEIPTS.ID);
+		public static Identity<TagsRecord, Integer> IDENTITY_TAGS = createIdentity(Tags.TAGS, Tags.TAGS.ID);
 	}
 
 	private static class UniqueKeys0 extends AbstractKeys {
 		public static final UniqueKey<ReceiptsRecord> CONSTRAINT_F = createUniqueKey(Receipts.RECEIPTS, Receipts.RECEIPTS.ID);
-		public static final UniqueKey<TagsRecord> CONSTRAINT_2 = createUniqueKey(Tags.TAGS, Tags.TAGS.ID, Tags.TAGS.TAG);
+		public static final UniqueKey<TagsRecord> CONSTRAINT_2 = createUniqueKey(Tags.TAGS, Tags.TAGS.ID);
+		public static final UniqueKey<TagsreceiptsRecord> CONSTRAINT_25 = createUniqueKey(Tagsreceipts.TAGSRECEIPTS, Tagsreceipts.TAGSRECEIPTS.TAGID, Tagsreceipts.TAGSRECEIPTS.RECEIPTID);
 	}
 }

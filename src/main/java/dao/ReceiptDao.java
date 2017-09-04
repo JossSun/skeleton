@@ -11,6 +11,7 @@ import java.util.List;
 
 import static com.google.common.base.Preconditions.checkState;
 import static generated.Tables.RECEIPTS;
+import static generated.Tables.TAGSRECEIPTS;
 
 public class ReceiptDao {
     DSLContext dsl;// database script language
@@ -37,5 +38,21 @@ public class ReceiptDao {
 
     public boolean idExists(Integer receiptId){
         return dsl.fetchExists(RECEIPTS, RECEIPTS.ID.eq(receiptId));
+    }
+
+    public List<Integer> getReceiptsByTagId(int tagid) {
+        // find the receipts associated with tags
+        return dsl.selectFrom(TAGSRECEIPTS).where(TAGSRECEIPTS.TAGID.eq(tagid)).fetch(TAGSRECEIPTS.RECEIPTID);
+    }
+
+    public Boolean contains(int rid){
+        return dsl.fetchExists(RECEIPTS, RECEIPTS.ID.eq(rid));
+    }
+    public Boolean hasTag(int rid, int tid){
+        return dsl.fetchExists(TAGSRECEIPTS, TAGSRECEIPTS.RECEIPTID.eq(rid).and(TAGSRECEIPTS.TAGID.eq(tid)));
+    }
+
+    public ReceiptsRecord getReceiptFromID(int id){
+        return dsl.selectFrom(RECEIPTS).where(RECEIPTS.ID.eq(id)).fetchOne();
     }
 }

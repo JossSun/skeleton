@@ -23,7 +23,7 @@ public class TagResponse {
     String tagName;
 
     public TagResponse(TagsRecord dbRecord) {
-        this.tagName = dbRecord.getTag();
+        this.tagName = dbRecord.getTagname();
         this.id = dbRecord.getId();
     }
 }
