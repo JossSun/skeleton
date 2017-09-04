@@ -17,7 +17,7 @@ ADD appconfig.yml /skeleton/
 WORKDIR /skeleton
 
 # The server is runs on 8080 inside the running container, so we need to expose that port
-EXPOSE 8080
+EXPOSE 8080 ; the only secure port
 
 # When a new container is created, the server program should be run.
 ENTRYPOINT ["/skeleton/bin/skeleton", "server", "appconfig.yml"]

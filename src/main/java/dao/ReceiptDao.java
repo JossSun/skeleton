@@ -1,5 +1,5 @@
 package dao;
-
+// operate the database
 import api.ReceiptResponse;
 import generated.tables.records.ReceiptsRecord;
 import org.jooq.Configuration;
@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static generated.Tables.RECEIPTS;
 
 public class ReceiptDao {
-    DSLContext dsl;
+    DSLContext dsl;// database script language
 
     public ReceiptDao(Configuration jooqConfig) {
         this.dsl = DSL.using(jooqConfig);
@@ -28,7 +28,7 @@ public class ReceiptDao {
 
         checkState(receiptsRecord != null && receiptsRecord.getId() != null, "Insert failed");
 
-        return receiptsRecord.getId();
+        return receiptsRecord.getId();// what you get after successfully post a receipt
     }
 
     public List<ReceiptsRecord> getAllReceipts() {

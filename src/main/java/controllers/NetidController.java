@@ -11,18 +11,13 @@ import io.dropwizard.jersey.sessions.Session;
 // it must be annotated with at least @Path
 @Path("")
 @Produces(MediaType.APPLICATION_JSON)
-public class HelloWorldController {
+public class NetidController {
 
     // You can specify additional @Path steps; they will be relative
     // to the @Path defined at the class level
     @GET
-    @Path("/hello")
-    public String helloWorld() {
-        return "Hello World ";
-    }// session has not been set up-> fail
-    //original public String helloWorld(@Session HttpSession session) {return "Hello World " + session.toString();
-    // change it to the simplest versio to pass
-    // simple example to write function that works
-
-
+    @Path("/netid")
+    public String getNetid() {
+        return "rs2468";
+    }
 }

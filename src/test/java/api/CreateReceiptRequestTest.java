@@ -21,14 +21,14 @@ public class CreateReceiptRequestTest {
         receipt.merchant = "OK";
 
         receipt.amount = new BigDecimal(33.44);
-        assertThat(validator.validate(receipt), empty());
+        assertThat(validator.validate(receipt), empty());// validate(receipt) tries to determine whether the reipt is valid; empty means it passed
     }
 
     @Test
     public void testMissingAmount() {
         CreateReceiptRequest receipt = new CreateReceiptRequest();
         receipt.merchant = "OK";
-
+        // can pass without amount
         //receipt.amount = new BigDecimal(33.44);
         assertThat(validator.validate(receipt), empty());
     }
@@ -37,7 +37,7 @@ public class CreateReceiptRequestTest {
     public void testMissingMerchant() {
         CreateReceiptRequest receipt = new CreateReceiptRequest();
         receipt.amount = new BigDecimal(33.44);
-
+        // without merchant then cannot pass
         validator.validate(receipt);
         assertThat(validator.validate(receipt), hasSize(1));
     }
