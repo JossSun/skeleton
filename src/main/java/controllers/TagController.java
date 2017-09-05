@@ -61,12 +61,15 @@ public class TagController {
 
     @GET
     public List<ReceiptResponse> getReceipts(@NotNull @PathParam("tag") String tagName) {
-        Integer tagId = tags.getTagIdByName(tagName);
-        List<Integer> receiptIDs = receipts.getReceiptsByTagId(tagId);
-        List<ReceiptsRecord> ReceiptsRecords = new ArrayList<ReceiptsRecord>();
-        for (int id: receiptIDs) {
-            ReceiptsRecords.add(receipts.getReceiptFromID(id));
-        }
-        return ReceiptsRecords.stream().map(ReceiptResponse::new).collect(toList());// the function
+        if(!tags.tagExists(tag)){new WebApplicationException("tag does not exist", Response.Status.NOT_FOUND);}
+
+            Integer tagId = tags.getTagIdByName(tagName);
+            List<Integer> receiptIDs = receipts.getReceiptsByTagId(tagId);
+            List<ReceiptsRecord> ReceiptsRecords = new ArrayList<ReceiptsRecord>();
+            for (int id: receiptIDs) {
+                ReceiptsRecords.add(receipts.getReceiptFromID(id));
+            }
+            return ReceiptsRecords.stream().map(ReceiptResponse::new).collect(toList());// the function
+        
     }
 }
