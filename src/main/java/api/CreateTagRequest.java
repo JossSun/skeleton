@@ -15,6 +15,5 @@ import java.math.BigDecimal;
 public class CreateTagRequest {
     @NotEmpty
     public String tagName;
-    @NotEmpty
-    public int receiptId;
+
 }
